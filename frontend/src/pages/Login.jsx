@@ -73,6 +73,7 @@ const Login = () => {
           <button type="submit">
             {loading ? "Cargando..." : "Iniciar Sesión"}
           </button>
+          <a onClick={() => navigate("/forgot-password")}>Olvide mi contraseña</a>
           <p>
             Aun no tienes cuenta?{" "}
             <b onClick={() => navigate("/")}>Registrate!</b>

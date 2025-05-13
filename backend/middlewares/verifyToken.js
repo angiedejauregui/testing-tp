@@ -1,11 +1,12 @@
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const verifyToken = async (req, res, next) => {
   // Usar Authorization como el nombre estándar del header
   const token = req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
 
   if (token) {
-    jwt.verify(token, "secreto", (error, data) => {
+    jwt.verify(token, process.env.JWT_SECRET, (error, data) => {
       if (error) {
         return res.status(401).json({ mensaje: "Token inválido" });
       } else {

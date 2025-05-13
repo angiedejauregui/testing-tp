@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./database/db");
+const dotenv = require("dotenv").config();
 
 const controllers = require("./controllers");
 const verifyToken = require("./middlewares/verifyToken");
@@ -13,6 +14,8 @@ app.use(express.json());
 app.get("/user", verifyToken, controllers.getUserById);
 app.post("/register", controllers.register);
 app.post("/login", controllers.login);
+app.post("/forgot-password", controllers.forgotPassword);
+app.post("/reset-password/:token", controllers.resetPassword);
 
 const PORT = 4000;
 
