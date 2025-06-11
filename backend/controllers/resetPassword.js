@@ -1,5 +1,5 @@
 const Usuario = require('../model/usuario');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const resetPassword = async (req, res) => {
