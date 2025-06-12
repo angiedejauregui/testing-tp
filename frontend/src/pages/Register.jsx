@@ -13,7 +13,8 @@ const Register = () => {
     telefono: "",
     confirmarContraseña: "",
   });
-  const [mensaje, setMensaje] = useState();
+  const [mensajeSuccess, setMensajeSuccess] = useState("");
+  const [mensajeError, setMensajeError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -34,63 +35,78 @@ const Register = () => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (
-      nombre !== "" &&
-      apellido !== "" &&
-      correo !== "" &&
-      nacimiento !== "" &&
-      telefono !== "" &&
-      contraseña !== "" &&
-      confirmarContraseña !== ""
-    ) {
-      const Usuario = {
-        nombre,
-        apellido,
-        correo,
-        nacimiento,
-        telefono,
-        contraseña,
-        confirmarContraseña,
-      };
-      setLoading(true);
-      await axios
-        .post("https://testing-tp.onrender.com/register", Usuario)
-        .then((res) => {
-          const { data } = res;
-          setMensaje(data.mensaje);
-          setInputs({
-            nombre: "",
-            contraseña: "",
-            correo: "",
-            apellido: "",
-            nacimiento: "",
-            telefono: "",
-            confirmarContraseña: "",
-          });
-          setTimeout(() => {
-            setMensaje("");
-            navigate("/login");
-          }, 1500);
-        })
-        .catch((error) => {
-          console.error(error);
-          setMensaje("Hubo un error");
-          setTimeout(() => {
-            setMensaje("");
-          }, 1500);
+ const onSubmit = async (e) => {
+  e.preventDefault();
+
+  if (
+    nombre !== "" &&
+    apellido !== "" &&
+    correo !== "" &&
+    nacimiento !== "" &&
+    telefono !== "" &&
+    contraseña !== "" &&
+    confirmarContraseña !== ""
+  ) {
+    const Usuario = {
+      nombre,
+      apellido,
+      correo,
+      nacimiento,
+      telefono,
+      contraseña,
+      confirmarContraseña,
+    };
+
+    setLoading(true);
+
+    try {
+      const res = await axios.post("https://testing-tp.onrender.com/register", Usuario);
+      const { data } = res;
+
+      if (data.mensaje === "Usuario creado correctamente") {
+        setMensajeSuccess(data.mensaje);
+        setMensajeError("");
+        setInputs({
+          nombre: "",
+          contraseña: "",
+          correo: "",
+          apellido: "",
+          nacimiento: "",
+          telefono: "",
+          confirmarContraseña: "",
         });
 
-      setLoading(false);
+        setTimeout(() => {
+          setMensajeSuccess("");
+          navigate("/login");
+        }, 1500);
+      } else {
+        setMensajeError(data.mensaje || "No se pudo registrar");
+        setMensajeSuccess("");
+      }
+
+    } catch (error) {
+      console.error(error);
+      setMensajeError("Hubo un error en el servidor");
+      setMensajeSuccess("");
     }
-  };
+
+    setLoading(false);
+  } else {
+      setMensajeError("Por favor completá todos los campos");
+    }
+};
+
 
   return (
     <>
       <div className="container">
         <h2>Registrarse</h2>
         <form onSubmit={(e) => onSubmit(e)}>
+          {mensajeSuccess && (
+            <div className="mensaje success">{mensajeSuccess}</div>
+          )}
+          {mensajeError && <div className="mensaje error">{mensajeError}</div>}
           <input
             onChange={(e) => HandleChange(e)}
             value={nombre}
@@ -125,7 +141,7 @@ const Register = () => {
             id="nacimiento"
             type="date"
             placeholder="Fecha de nacimiento"
-            max={today} 
+            max={today}
             autoComplete="off"
           />
           <input
@@ -165,7 +181,6 @@ const Register = () => {
           </p>
         </form>
       </div>
-      {mensaje && <div className="mensaje">{mensaje}</div>}
     </>
   );
 };

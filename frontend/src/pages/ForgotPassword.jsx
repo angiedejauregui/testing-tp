@@ -3,59 +3,64 @@ import "../styles/auth.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
 const ForgotPassword = () => {
   const [correo, setCorreo] = useState("");
-  const [mensaje, setMensaje] = useState();
+  const [mensajeSuccess, setMensajeSuccess] = useState("");
+  const [mensajeError, setMensajeError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSbmit = async (e) => {
     e.preventDefault();
+
     if (correo !== "") {
       setLoading(true);
-      await axios
-        .post("https://testing-tp.onrender.com/forgot-password", { correo })
-        .then((res) => {
-          const { data } = res;
-          setMensaje(data.mensaje);
-          setTimeout(() => {
-            setMensaje("");
-            localStorage.setItem("token", data?.usuario.token);
-          }, 1500);
-        })
-        .catch((error) => {
-          console.error(error);
-          setMensaje("Correo no encontrado");
-          setTimeout(() => {
-            setMensaje("");
-          }, 1500);
-        });
-      setCorreo("");
+
+      try {
+        const res = await axios.post("https://testing-tp.onrender.com/forgot-password", { correo });
+        const { data } = res;
+
+        setMensajeSuccess(data.mensaje || "Correo enviado correctamente");
+        setMensajeError("");
+
+        localStorage.setItem("token", data?.usuario?.token || "");
+        setCorreo(""); // ✅ Vaciar solo si todo fue bien
+
+      } catch (error) {
+        console.error(error);
+        setMensajeError("Correo no encontrado");
+        setMensajeSuccess("");
+        // ❌ No vaciamos el correo
+      }
+
       setLoading(false);
+    } else {
+      setMensajeError("Por favor completá con tu correo electrónico");
+      setMensajeSuccess("");
     }
   };
 
   return (
-    <>
-      <div className="container">
-        <h2>Recuperar contraseña</h2>
-        <form onSubmit={(e) => handleSbmit(e)}>
-          <input
-            type="email"
-            placeholder="Correo"
-            autoComplete="off"
-            onChange={(e) => setCorreo(e.target.value)}
-            name="correo"
-            id="correo"
-            value={correo}
-          />
-          <button>{loading ? "Cargando..." : "Enviar"}</button>
-        </form>
-      </div>
-      {mensaje && <div className="mensaje">{mensaje}</div>}
-    </>
+    <div className="container">
+      <h2>Recuperar contraseña</h2>
+      <form onSubmit={handleSbmit}>
+        {mensajeSuccess && <div className="mensaje success">{mensajeSuccess}</div>}
+        {mensajeError && <div className="mensaje error">{mensajeError}</div>}
+        
+        <input
+          type="email"
+          placeholder="Correo"
+          autoComplete="off"
+          onChange={(e) => setCorreo(e.target.value)}
+          name="correo"
+          id="correo"
+          value={correo}
+        />
+        
+        <button type="submit">{loading ? "Cargando..." : "Enviar"}</button>
+      </form>
+    </div>
   );
 };
 
