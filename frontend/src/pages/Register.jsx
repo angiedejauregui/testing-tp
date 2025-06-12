@@ -18,6 +18,8 @@ const Register = () => {
 
   const navigate = useNavigate();
 
+  const today = new Date().toISOString().split("T")[0];
+
   const {
     nombre,
     apellido,
@@ -123,6 +125,7 @@ const Register = () => {
             id="nacimiento"
             type="date"
             placeholder="Fecha de nacimiento"
+            max={today} 
             autoComplete="off"
           />
           <input
