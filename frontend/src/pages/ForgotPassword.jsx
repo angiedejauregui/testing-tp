@@ -59,6 +59,12 @@ const ForgotPassword = () => {
         />
         
         <button type="submit">{loading ? "Cargando..." : "Enviar"}</button>
+        <p>
+          ¿Ya recordaste tu contraseña?{" "}
+          <b onClick={() => navigate("/login")}>
+            Iniciar sesión
+          </b>
+        </p>
       </form>
     </div>
   );

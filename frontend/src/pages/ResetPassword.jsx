@@ -54,7 +54,6 @@ const ResetPassword = () => {
       <form onSubmit={handleSubmit}>
         {mensajeSuccess && <div className="mensaje success">{mensajeSuccess}</div>}
         {mensajeError && <div className="mensaje error">{mensajeError}</div>}
-
         <input
           onChange={(e) => setContraseña(e.target.value)}
           value={contraseña}
