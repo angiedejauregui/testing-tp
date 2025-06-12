@@ -16,7 +16,7 @@ const ForgotPassword = () => {
     if (correo !== "") {
       setLoading(true);
       await axios
-        .post("http://localhost:4000/forgot-password", { correo })
+        .post("https://testing-tp.onrender.com/forgot-password", { correo })
         .then((res) => {
           const { data } = res;
           setMensaje(data.mensaje);

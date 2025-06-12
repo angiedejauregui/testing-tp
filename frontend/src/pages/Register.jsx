@@ -54,7 +54,7 @@ const Register = () => {
       };
       setLoading(true);
       await axios
-        .post("http://localhost:4000/register", Usuario)
+        .post("https://testing-tp.onrender.com/register", Usuario)
         .then((res) => {
           const { data } = res;
           setMensaje(data.mensaje);

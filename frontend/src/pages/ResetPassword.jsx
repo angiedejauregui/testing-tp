@@ -18,7 +18,7 @@ const ResetPassword = () => {
     if (contraseña !== "") {
       setLoading(true);
       await axios
-        .post(`http://localhost:4000/reset-password/${token}`, { contraseña })
+        .post(`https://testing-tp.onrender.com/reset-password/${token}`, { contraseña })
         .then((res) => {
           const { data } = res;
           setMensaje(data.mensaje);

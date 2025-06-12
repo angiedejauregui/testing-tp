@@ -12,7 +12,7 @@ const Welcome = () => {
   useEffect(() => {
     if (token) {
         axios
-        .get(`http://localhost:4000/user`, {
+        .get(`https://testing-tp.onrender.com/user`, {
             headers: {
               Authorization: `Bearer ${token}`, // ✅ estándar
             },
