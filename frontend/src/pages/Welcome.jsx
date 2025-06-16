@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/welcome.css";
 
 const Welcome = () => {
   const [name, setName] = useState();
@@ -11,27 +12,31 @@ const Welcome = () => {
 
   useEffect(() => {
     if (token) {
-        axios
+      axios
         .get(`https://testing-tp.onrender.com/user`, {
-            headers: {
-              Authorization: `Bearer ${token}`, // ✅ estándar
-            },
-          })
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then(({ data }) => setName(data.nombre))
         .catch((error) => console.error(error));
     }
   }, [token]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div>
-      <h3>{name ? `¡Felicitaciones ${name}!` : "¿Que estas haciendo? 🕵️‍♂️"}</h3>
-      <h2>
-        {name ? "Te pudiste logear correctamente🎉" : "Te estamos viendo..."}
+      <h2 className="bienvenido">
+        {`¡Bienvenido/a a AuraMusic, ${name}! 🎶`}
       </h2>
-      <div>
-        <button onClick={() => navigate("/login")}>Login</button>
-        <button onClick={() => navigate("/")}>Register</button>
-      </div>
+      <h3>
+        {"Iniciaste sesión con éxito. ¡Disfrutá la mejor música sin interrupciones! 🎧"}
+      </h3>
+      <button className="btn-logout" onClick={handleLogout}>Cerrar sesión</button>
     </div>
   );
 };
