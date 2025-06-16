@@ -21,7 +21,7 @@ const forgotPassword = async (req, res) => {
       expiresIn: "1h",
     });
 
-    const resetLink = `https://testing-tp.vercel.app//reset-password/${token}`;
+    const resetLink = `https://testing-tp.vercel.app/reset-password/${token}`;
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
