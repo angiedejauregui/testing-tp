@@ -17,71 +17,82 @@ const Login = () => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
- const onSubmit = async (e) => {
-  e.preventDefault();
+  const onSubmit = async (e) => {
+    e.preventDefault();
 
-  if (correo !== "" && contraseña !== "") {
-    const Usuario = { correo, contraseña };
-    setLoading(true);
+    if (correo !== "" && contraseña !== "") {
+      const Usuario = { correo, contraseña };
+      setLoading(true);
 
-    try {
-      const res = await axios.post("https://testing-tp.onrender.com/login", Usuario);
-      const { data } = res;
+      try {
+        const res = await axios.post(
+          "https://testing-tp.onrender.com/login",
+          Usuario
+        );
+        const { data } = res;
 
-      if (data?.usuario?.token) {
-        setMensajeSuccess(data.mensaje || "Inicio de sesión exitoso");
-        setMensajeError("");
-        localStorage.setItem("token", data.usuario.token);
-        setInputs({ correo: "", contraseña: "" });
+        if (data?.usuario?.token) {
+          setMensajeSuccess(data.mensaje || "Inicio de sesión exitoso");
+          setMensajeError("");
+          localStorage.setItem("token", data.usuario.token);
+          setInputs({ correo: "", contraseña: "" });
 
-        navigate("/welcome");
-      } else {
-        setMensajeError(data.mensaje || "Credenciales incorrectas");
+          navigate("/welcome");
+        } else {
+          setMensajeError(data.mensaje || "Credenciales incorrectas");
+          setMensajeSuccess("");
+        }
+      } catch (error) {
+        console.error(error);
+        setMensajeError("Correo o contraseña incorrecta");
         setMensajeSuccess("");
       }
-    } catch (error) {
-      console.error(error);
-      setMensajeError("Correo o contraseña incorrecta");
+
+      setLoading(false);
+    } else {
+      setMensajeError("Por favor completá todos los campos");
       setMensajeSuccess("");
     }
-
-    setLoading(false);
-  } else {
-    setMensajeError("Por favor completá todos los campos");
-    setMensajeSuccess("");
-  }
-};
-
+  };
 
   return (
     <>
       <div className="container">
         <h2>Iniciar Sesión</h2>
         <form onSubmit={onSubmit}>
-          {mensajeSuccess && <div className="mensaje success">{mensajeSuccess}</div>}
+          {mensajeSuccess && (
+            <div className="mensaje success">{mensajeSuccess}</div>
+          )}
           {mensajeError && <div className="mensaje error">{mensajeError}</div>}
+          <label htmlFor="correo">Correo</label>
+
           <input
             onChange={HandleChange}
             value={correo}
             name="correo"
             id="correo"
             type="email"
-            placeholder="Correo"
             autoComplete="off"
           />
+          <label htmlFor="contraseña">Contraseña</label>
+
           <input
             onChange={HandleChange}
             value={contraseña}
             name="contraseña"
             id="contraseña"
             type="password"
-            placeholder="Contraseña"
             autoComplete="off"
           />
-          <button type="submit">{loading ? "Cargando..." : "Iniciar Sesión"}</button>
-          <a onClick={() => navigate("/forgot-password")}>Olvidé mi contraseña</a>
+          <button type="submit">
+            {loading ? "Cargando..." : "Iniciar Sesión"}
+          </button>
+          <a onClick={() => navigate("/forgot-password")}>
+            Olvidé mi contraseña
+          </a>
           <p>
-            ¿Aún no tienes cuenta? <b onClick={() => navigate("/")}>¡Regístrate!</b>
+            ¿Aún no tienes cuenta?{" "}
+            <b onClick={() => navigate("/")}>¡Regístrate!</b>
           </p>
         </form>
       </div>

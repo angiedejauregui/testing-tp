@@ -21,7 +21,9 @@ const forgotPassword = async (req, res) => {
       expiresIn: "1h",
     });
 
-    const resetLink = `http://localhost:5173/reset-password/${token}`;
+    const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173"; 
+
+    const resetLink = `${FRONTEND_URL}/reset-password/${token}`;
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -43,9 +45,9 @@ const forgotPassword = async (req, res) => {
         console.log(error);
       } else {
         return res.json({
-            mensaje: "Correo enviado",
-            usuario: { token },
-          });
+          mensaje: "Correo enviado",
+          usuario: { token },
+        });
       }
     });
   });

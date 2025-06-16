@@ -19,9 +19,12 @@ const ResetPassword = () => {
       setLoading(true);
 
       try {
-        const res = await axios.post(`https://testing-tp.onrender.com/reset-password/${token}`, {
-          contraseña,
-        });
+        const res = await axios.post(
+          `https://testing-tp.onrender.com/reset-password/${token}`,
+          {
+            contraseña,
+          }
+        );
 
         const { data } = res;
 
@@ -52,15 +55,18 @@ const ResetPassword = () => {
       <h2>Restablecer Contraseña</h2>
 
       <form onSubmit={handleSubmit}>
-        {mensajeSuccess && <div className="mensaje success">{mensajeSuccess}</div>}
+        {mensajeSuccess && (
+          <div className="mensaje success">{mensajeSuccess}</div>
+        )}
         {mensajeError && <div className="mensaje error">{mensajeError}</div>}
+        <label htmlFor="Contraseña">Contraseña</label>
+
         <input
           onChange={(e) => setContraseña(e.target.value)}
           value={contraseña}
           name="contraseña"
           id="contraseña"
           type="password"
-          placeholder="Contraseña"
           autoComplete="off"
         />
         <button type="submit">{loading ? "Cargando..." : "Restablecer"}</button>

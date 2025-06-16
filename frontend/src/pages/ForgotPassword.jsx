@@ -18,7 +18,10 @@ const ForgotPassword = () => {
       setLoading(true);
 
       try {
-        const res = await axios.post("https://testing-tp.onrender.com/forgot-password", { correo });
+        const res = await axios.post(
+          "https://testing-tp.onrender.com/forgot-password",
+          { correo }
+        );
         const { data } = res;
 
         setMensajeSuccess(data.mensaje || "Correo enviado correctamente");
@@ -26,7 +29,6 @@ const ForgotPassword = () => {
 
         localStorage.setItem("token", data?.usuario?.token || "");
         setCorreo(""); // ✅ Vaciar solo si todo fue bien
-
       } catch (error) {
         console.error(error);
         setMensajeError("Correo no encontrado");
@@ -45,25 +47,25 @@ const ForgotPassword = () => {
     <div className="container">
       <h2>Recuperar contraseña</h2>
       <form onSubmit={handleSbmit}>
-        {mensajeSuccess && <div className="mensaje success">{mensajeSuccess}</div>}
+        {mensajeSuccess && (
+          <div className="mensaje success">{mensajeSuccess}</div>
+        )}
         {mensajeError && <div className="mensaje error">{mensajeError}</div>}
-        
+        <label htmlFor="correo">Correo</label>
+
         <input
           type="email"
-          placeholder="Correo"
           autoComplete="off"
           onChange={(e) => setCorreo(e.target.value)}
           name="correo"
           id="correo"
           value={correo}
         />
-        
+
         <button type="submit">{loading ? "Cargando..." : "Enviar"}</button>
         <p>
           ¿Ya recordaste tu contraseña?{" "}
-          <b onClick={() => navigate("/login")}>
-            Iniciar sesión
-          </b>
+          <b onClick={() => navigate("/login")}>Iniciar sesión</b>
         </p>
       </form>
     </div>

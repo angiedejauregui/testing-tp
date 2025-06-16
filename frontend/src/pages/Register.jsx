@@ -35,149 +35,181 @@ const Register = () => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
- const onSubmit = async (e) => {
-  e.preventDefault();
+  const onSubmit = async (e) => {
+    e.preventDefault();
 
-  if (
-    nombre !== "" &&
-    apellido !== "" &&
-    correo !== "" &&
-    nacimiento !== "" &&
-    telefono !== "" &&
-    contraseña !== "" &&
-    confirmarContraseña !== ""
-  ) {
-    const Usuario = {
-      nombre,
-      apellido,
-      correo,
-      nacimiento,
-      telefono,
-      contraseña,
-      confirmarContraseña,
-    };
+    if (
+      nombre !== "" &&
+      apellido !== "" &&
+      correo !== "" &&
+      nacimiento !== "" &&
+      telefono !== "" &&
+      contraseña !== "" &&
+      confirmarContraseña !== ""
+    ) {
+      if (!/^\d{11}$/.test(telefono)) {
+        setMensajeError("El teléfono debe tener 11 dígitos");
+        setMensajeSuccess("");
+        return;
+      }
 
-    setLoading(true);
+      const Usuario = {
+        nombre,
+        apellido,
+        correo,
+        nacimiento,
+        telefono,
+        contraseña,
+        confirmarContraseña,
+      };
 
-    try {
-      const res = await axios.post("https://testing-tp.onrender.com/register", Usuario);
-      const { data } = res;
+      setLoading(true);
 
-      if (data.mensaje === "Usuario creado correctamente") {
-        setMensajeSuccess(data.mensaje);
-        setMensajeError("");
-        setInputs({
-          nombre: "",
-          contraseña: "",
-          correo: "",
-          apellido: "",
-          nacimiento: "",
-          telefono: "",
-          confirmarContraseña: "",
-        });
+      try {
+        const res = await axios.post(
+          "https://testing-tp.onrender.com/register",
+          Usuario
+        );
+        const { data } = res;
 
-        setTimeout(() => {
+        if (data.mensaje === "Usuario creado correctamente") {
+          setMensajeSuccess(data.mensaje);
+          setMensajeError("");
+          setInputs({
+            nombre: "",
+            contraseña: "",
+            correo: "",
+            apellido: "",
+            nacimiento: "",
+            telefono: "",
+            confirmarContraseña: "",
+          });
+
+          setTimeout(() => {
+            setMensajeSuccess("");
+            navigate("/login");
+          }, 1500);
+        } else {
+          setMensajeError(data.mensaje || "No se pudo registrar");
           setMensajeSuccess("");
-          navigate("/login");
-        }, 1500);
-      } else {
-        setMensajeError(data.mensaje || "No se pudo registrar");
+        }
+      } catch (error) {
+        console.error(error);
+        setMensajeError("Hubo un error en el servidor");
         setMensajeSuccess("");
       }
 
-    } catch (error) {
-      console.error(error);
-      setMensajeError("Hubo un error en el servidor");
-      setMensajeSuccess("");
-    }
-
-    setLoading(false);
-  } else {
+      setLoading(false);
+    } else {
       setMensajeError("Por favor completá todos los campos");
     }
-};
-
+  };
 
   return (
     <>
       <div className="container">
         <h2>Registrarse</h2>
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form onSubmit={onSubmit}>
           {mensajeSuccess && (
             <div className="mensaje success">{mensajeSuccess}</div>
           )}
           {mensajeError && <div className="mensaje error">{mensajeError}</div>}
-          <input
-            onChange={(e) => HandleChange(e)}
-            value={nombre}
-            name="nombre"
-            id="nombre"
-            type="text"
-            placeholder="Nombre"
-            autoComplete="off"
-          />
-          <input
-            onChange={(e) => HandleChange(e)}
-            value={apellido}
-            name="apellido"
-            id="apellido"
-            type="text"
-            placeholder="Apellido"
-            autoComplete="off"
-          />
-          <input
-            onChange={(e) => HandleChange(e)}
-            value={correo}
-            name="correo"
-            id="correo"
-            type="email"
-            placeholder="Correo"
-            autoComplete="off"
-          />
-          <input
-            onChange={(e) => HandleChange(e)}
-            value={nacimiento}
-            name="nacimiento"
-            id="nacimiento"
-            type="date"
-            placeholder="Fecha de nacimiento"
-            max={today}
-            autoComplete="off"
-          />
-          <input
-            onChange={(e) => HandleChange(e)}
-            value={telefono}
-            name="telefono"
-            id="telefono"
-            type="tel"
-            placeholder="Telefono"
-            autoComplete="off"
-          />
-          <input
-            onChange={(e) => HandleChange(e)}
-            value={contraseña}
-            name="contraseña"
-            id="contraseña"
-            type="password"
-            placeholder="Contraseña"
-            autoComplete="off"
-          />
-          <input
-            onChange={(e) => HandleChange(e)}
-            value={confirmarContraseña}
-            name="confirmarContraseña"
-            id="confirmarContraseña"
-            type="password"
-            placeholder="Confirmar contraseña"
-            autoComplete="off"
-          />
+
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="nombre">Nombre</label>
+              <input
+                onChange={HandleChange}
+                value={nombre}
+                name="nombre"
+                id="nombre"
+                type="text"
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="apellido">Apellido</label>
+              <input
+                onChange={HandleChange}
+                value={apellido}
+                name="apellido"
+                id="apellido"
+                type="text"
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="form-group full-width">
+              <label htmlFor="correo">Correo</label>
+              <input
+                onChange={HandleChange}
+                value={correo}
+                name="correo"
+                id="correo"
+                type="email"
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="telefono">Teléfono</label>
+              <input
+                onChange={HandleChange}
+                value={telefono}
+                name="telefono"
+                id="telefono"
+                type="tel"
+                autoComplete="off"
+                maxLength={11}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="nacimiento">Fecha de nacimiento</label>
+              <input
+                onChange={HandleChange}
+                value={nacimiento}
+                name="nacimiento"
+                id="nacimiento"
+                type="date"
+                max={today}
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="contraseña">Contraseña</label>
+              <input
+                onChange={HandleChange}
+                value={contraseña}
+                name="contraseña"
+                id="contraseña"
+                type="password"
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirmarContraseña">Confirmar contraseña</label>
+              <input
+                onChange={HandleChange}
+                value={confirmarContraseña}
+                name="confirmarContraseña"
+                id="confirmarContraseña"
+                type="password"
+                autoComplete="off"
+              />
+            </div>
+          </div>
 
           <button type="submit">
             {loading ? "Cargando..." : "Registrarme"}
           </button>
+
           <p>
-            Ya tienes una cuenta?{" "}
-            <b onClick={() => navigate("/login")}>Inicia Sesión!</b>
+            ¿Ya tenés una cuenta?{" "}
+            <b onClick={() => navigate("/login")}>Iniciá sesión</b>
           </p>
         </form>
       </div>

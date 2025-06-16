@@ -3,7 +3,7 @@
     background-color: #F7F7F9;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width: 420px;
     margin: 0 auto;
     padding: 2rem;
   }
@@ -27,7 +27,6 @@
     background-color: var(--white-color);
     margin: 0.5rem 0;
     box-sizing: border-box;
-    color: #101010;
   }
   
   form input:focus {
@@ -54,7 +53,7 @@
   }
   
   form button:hover {
-    background-color: rgb(113, 0, 165);
+    background-color: var(--primary-color);
   }
 
   form a {
@@ -78,16 +77,6 @@
   form p b:hover {
     text-decoration: underline;
   }
-  
-/*  
-  .mensaje {
-    margin-top: 1rem;
-    text-align: center;
-    background-color: rgba(113, 0, 165, 0.4);
-    padding: 0.5rem;
-    border-radius: 5px;
-    color: #fff;
-  } */
 
   .mensaje {
   padding: 10px;
@@ -108,4 +97,39 @@
   border: 1px solid #f5c6cb;
 }
 
-  
+form label {
+  display: block;
+  font-weight: 500;
+  font-size: 15px;
+  text-align: left;
+}
+
+
+
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+
+@media (max-width: 550px) {
+  .form-grid {
+    gap: 8px 12px;
+  }
+
+  .container {
+    padding: 1.5rem;
+    width: 350px;
+  }
+}
