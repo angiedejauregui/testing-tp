@@ -31,6 +31,11 @@ const Register = () => {
     confirmarContraseña,
   } = inputs;
 
+  const validarContraseña = (contraseña) => {
+    const regex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    return regex.test(contraseña);
+  };
+
   const HandleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
@@ -49,6 +54,14 @@ const Register = () => {
     ) {
       if (!/^\d{11}$/.test(telefono)) {
         setMensajeError("El teléfono debe tener 11 dígitos");
+        setMensajeSuccess("");
+        return;
+      }
+
+      if (!validarContraseña(contraseña)) {
+        setMensajeError(
+          "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número"
+        );
         setMensajeSuccess("");
         return;
       }
