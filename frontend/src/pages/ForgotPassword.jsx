@@ -28,12 +28,11 @@ const ForgotPassword = () => {
         setMensajeError("");
 
         localStorage.setItem("token", data?.usuario?.token || "");
-        setCorreo(""); // ✅ Vaciar solo si todo fue bien
+        setCorreo(""); 
       } catch (error) {
         console.error(error);
         setMensajeError("Correo no encontrado");
         setMensajeSuccess("");
-        // ❌ No vaciamos el correo
       }
 
       setLoading(false);

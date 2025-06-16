@@ -40,7 +40,6 @@ const ResetPassword = () => {
         console.error(error);
         setMensajeError("Error al restablecer la contraseña");
         setMensajeSuccess("");
-        // No vaciamos la contraseña si hubo error
       }
 
       setLoading(false);
@@ -59,7 +58,7 @@ const ResetPassword = () => {
           <div className="mensaje success">{mensajeSuccess}</div>
         )}
         {mensajeError && <div className="mensaje error">{mensajeError}</div>}
-        <label htmlFor="Contraseña">Contraseña</label>
+        <label htmlFor="contraseña">Contraseña</label>
 
         <input
           onChange={(e) => setContraseña(e.target.value)}
